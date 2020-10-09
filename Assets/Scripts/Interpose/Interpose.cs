@@ -22,14 +22,17 @@ public class Interpose : MonoBehaviour
     {
 
 	// difference between vectors divided by two will give midpoint
-	Vector3 mid = (target1.position - target2.position) - transform.position;
+	Vector3 midPosition1 = target1.position - transform.position;
+	Vector3 midPosition2 = target2.position - transform.position;
 
-	Vector3 midPoint = mid - transform.position;
+	// Actual midpoint between two targets
+	Vector3 midPoint = new Vector3((midPosition1.x+midPosition2.x)/2.0f, 0, (midPosition1.z+midPosition2.z)/2.0f);
+
 
 	// Check to see if interpose process is completed
 	if(midPoint.magnitude > minDistance)
 	{
-		Vector3 moveVector = mid.normalized*moveSpeed*Time.deltaTime;
+		Vector3 moveVector = midPoint.normalized*moveSpeed*Time.deltaTime;
 
 		// If condition is met, continue moving to the midpoint between targets
 		transform.position += moveVector;

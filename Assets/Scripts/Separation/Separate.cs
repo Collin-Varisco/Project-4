@@ -27,6 +27,8 @@ public class Separate : MonoBehaviour
         moveSpheres();
     }
 
+
+    // Movement of spheres after getting direction from Separation()
     void moveSpheres()
     {
         for (int i = 0; i < numSpheres; i++)
@@ -38,6 +40,7 @@ public class Separate : MonoBehaviour
         }
     }
 
+    // Calculate Projection direction
     Vector3 Separation(GameObject s)
     {
         Vector3 avoidVector = new Vector3();

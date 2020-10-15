@@ -13,7 +13,7 @@ public class Flee : MonoBehaviour
     void Update()
     {
         // Call FleeTarget() every frame
-	FleeTarget();
+	    FleeTarget();
 
     }
 

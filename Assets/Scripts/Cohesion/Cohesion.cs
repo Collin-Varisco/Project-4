@@ -4,6 +4,7 @@ using UnityEngine;
 
 
 
+
 public class Cohesion : MonoBehaviour
 {
     public GameObject rigidSphere;
@@ -17,9 +18,10 @@ public class Cohesion : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Instantiate spheres
         for (int i = 0; i < numPrefabs; i++)
         {
-                spheres[i] = Instantiate(rigidSphere, new Vector3(Random.Range(25,50), .5f, Random.Range(25, 50)), Quaternion.identity);
+            spheres[i] = Instantiate(rigidSphere, new Vector3(Random.Range(25,50), .5f, Random.Range(25, 50)), Quaternion.identity);
             spheres[i].GetComponent<Rigidbody>().velocity = new Vector3(Random.Range(2, 8), Random.Range(2, 8), Random.Range(2, 8));
         }
     }
@@ -28,29 +30,36 @@ public class Cohesion : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        SeekTarget();
+        cohesion();
     }
 
-    void SeekTarget()
+    // Movement 
+    void cohesion()
     {
         for(int i = 0; i < numPrefabs; i++)
         {
-            Vector3 cohesionVector = cohesionMethod(spheres[i]);
-            spheres[i].GetComponent<Rigidbody>().velocity = cohesionVector;
-                Vector3 moveVector = cohesionVector.normalized * Time.deltaTime;
-                spheres[i].transform.position += moveVector;
+            Vector3 center = cohesionMethod(spheres[i]);
+            Vector3 movement = center.normalized * Time.deltaTime;
+            spheres[i].GetComponent<Rigidbody>().velocity = center;
+            spheres[i].transform.position += movement;
         }
     }
 
     Vector3 cohesionMethod(GameObject j)
     {
-        Vector3 pv = new Vector3();
-        for(int i = 0; i < numPrefabs; i++)
+        Vector3 center = new Vector3();
+        
+        // set cohesionVector equal to the sum of all sphere positions in scene.
+        for (int i = 0; i < numPrefabs; i++)
         {
             if (spheres[i] != j)
-                pv = pv + spheres[i].transform.position;
+                center = center + spheres[i].transform.position;
         }
-        pv = pv / (numPrefabs - 1);
-        return (pv - j.transform.position) / 100;
-    }
+
+        // Calculate average to get the center of mass
+        center = center / (numPrefabs - 1);
+        center = (center - j.transform.position) / 100;
+    
+        return center;
+    } 
 }
